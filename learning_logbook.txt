@@ -1,3 +1,191 @@
-tk.Frame() acts like a container partition box
-.pack(side="left") instructs the layout manager to stack these columns next to each other from left to right across the computer monitor screen
-bg -> values set dark background colours
+GLOSSARY
+
+IMPORTING SOFTWARE
+
+import tkinter as tk
+  Loads Tkinter, Python's built in toolkit for making windows and buttons. "as tk" is a nickname so you can type tk. instead of tkinter.
+
+from data.quotes import streetcar_data
+  Loads the streetcar_data dictionary from quotes.py, which sits in the data folder.
+
+from pygame import mixer
+  Loads pygame's audio part, which plays the sound.
+
+mixer.init()
+  Switches the audio system on. It has to happen before you can play anything.
+
+BUILDING THE WINDOW
+
+app = tk.Tk()
+  Creates the main window. "app" is just the variable name holding it.
+
+app.title(...)
+  Sets the text in the title bar.
+
+app.geometry("1100x650")
+  Sets the window size (width x height, in pixels).
+
+app.resizable(False, False)
+  Stops the window being stretched.
+
+tk.Frame(...)
+  An invisible box that holds other things. Your three columns are Frames.
+
+bg= / fg=
+  Background colour and foreground (text) colour. Colours are hex codes like #1a1a24.
+
+width= / height=
+  Size in pixels.
+
+pack_propagate(False)
+  Tells a Frame to keep the size you gave it instead of shrinking to fit what's inside.
+
+.place(x=0, y=0)
+  Puts something at exact pixel positions. This is how the three columns sit side by side.
+
+relx, rely, relwidth, relheight
+  Position and size as fractions of the parent. relwidth=0.42 means 42% of the parent's width. This is how the kitchen and bedroom boxes sit inside the floorplan panel.
+
+highlightbackground, highlightthickness
+  The coloured outline around a Frame and how thick it is.
+
+THINGS THAT GO INSIDE THE WINDOW
+
+tk.Label(...)
+  A piece of text. Used for titles, the quote, the context and the analysis.
+
+text=
+  The words shown on a Label or Button.
+
+font=("Arial", 10, "bold")
+  Font name, size, then style.
+
+tk.Button(...)
+  A clickable button.
+
+.pack(...)
+  Puts a widget into its parent and stacks it below the previous one.
+
+pady / padx
+  Empty space above and below (pady) or left and right (padx) a widget.
+
+fill='x' / fill="both"
+  Stretches a widget sideways, or both ways, to fill the space.
+
+wraplength=
+  The width at which long text wraps onto a new line.
+
+justify="left"
+  Aligns wrapped text to the left.
+
+Widget
+  Anything on screen that you create: a Label, Button or Frame.
+
+Parent
+  The thing a widget goes inside. In tk.Label(analysis_panel, ...), analysis_panel is the parent.
+
+THE FUNCTION
+
+def trigger_sound(cue_key):
+  Defines a reusable block of code called trigger_sound. Nothing in it runs until something calls it.
+
+cue_key
+  A parameter: a placeholder for whichever cue you pass in, like "blue_piano".
+
+data = streetcar_data[cue_key]
+  Looks up that cue's block in the dictionary and stores it in data.
+
+data["context"]
+  Gets the value stored under the key "context".
+
+data.get("chatter_file")
+  Like data["..."], but returns None instead of crashing if the key doesn't exist. That's why cues without chatter still work.
+
+.config(...)
+  Changes something that already exists. For example context_box.config(text=...) swaps the words.
+
+if / elif / else
+  Decisions. "If it's this cue do this, else if it's that cue do that, otherwise do this."
+
+==
+  Asks "is this equal to that?" (A single = stores a value.)
+
+Indentation
+  The 4 spaces at the start of a line. Python uses them to know which lines belong inside the function or the if.
+
+SOUND
+
+mixer.music
+  pygame's channel for background music. It can only play one track at a time.
+
+mixer.music.load(...) / .play()
+  Loads a file, then starts it.
+
+mixer.Sound(...)
+  A separate sound channel. This is what lets the chatter play at the same time as the music.
+
+.set_volume(0.5)
+  Volume from 0.0 (silent) to 1.0 (full).
+
+play(loops=-1)
+  Repeat forever. -1 means "loop with no end".
+
+mixer.stop()
+  Stops the Sound channels, which cuts off old chatter when you switch cues.
+
+BUTTONS AND THE FINISH
+
+command=
+  What a button does when clicked.
+
+lambda:
+  A tiny one-line function with no name. command=lambda: trigger_sound("blue_piano") means "when clicked, run trigger_sound with this cue". Without lambda, the function would run immediately when the program starts.
+
+app.mainloop()
+  Keeps the window open and listening for clicks. It has to be the last line, because anything after it never runs.
+
+IN quotes.py
+
+Dictionary { }
+  A collection of labelled items, written as "key": value.
+
+Key
+  The label, like "quote" or "colour".
+
+Value
+  What's stored under it, like the actual quote text.
+
+Nested dictionary
+  A dictionary inside a dictionary. streetcar_data holds four cues, and each cue holds its own keys.
+
+"blue_piano" etc.
+  The cue names. These must match exactly between quotes.py and main.py, which is why "poker_fight" broke the Sound of the Brutes button.
+
+Commas
+  Every line in a block ends with a comma except the last one.
+
+ERRORS I HIT
+
+KeyError
+  Asked for a key that doesn't exist.
+
+NameError
+  Used a name that was never defined.
+
+ModuleNotFoundError
+  A library you imported isn't installed.
+
+FileNotFoundError
+  A file path points to something that isn't there.
+
+Typo
+  A spelling mistake in code, like cofig and mixter. Python takes names literally.
+
+Terminal
+  The panel at the bottom of VS Code where the program prints messages and errors.
+
+Interpreter
+  The Python version that runs your code. I swapped from 3.9.6 to 3.13 because Apple's old Tk 8.5 wouldn't draw the panels.
+
+pip
+  The tool that installs extra libraries like pygame.
