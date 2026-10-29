@@ -77,7 +77,7 @@ def trigger_sound(cue_key):
     print("chatter_path:", chatter_path)
     if chatter_path:
         chatter = mixer.Sound(chatter_path)
-        chatter.set_volume(0.7)
+        chatter.set_volume(0.5)
         chatter.play(loops=-1)
         print("chatter playing, length in seconds :", chatter.get_length())
 
